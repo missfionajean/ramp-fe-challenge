@@ -1,9 +1,14 @@
-import classNames from "classnames"
-import { useRef } from "react"
-import { InputCheckboxComponent } from "./types"
+import classNames from "classnames";
+import { useRef } from "react";
+import { InputCheckboxComponent } from "./types";
 
-export const InputCheckbox: InputCheckboxComponent = ({ id, checked = false, disabled, onChange }) => {
-  const { current: inputId } = useRef(`RampInputCheckbox-${id}`)
+export const InputCheckbox: InputCheckboxComponent = ({
+  id,
+  checked = false,
+  disabled,
+  onChange,
+}) => {
+  const { current: inputId } = useRef(`RampInputCheckbox-${id}`);
 
   return (
     <div className="RampInputCheckbox--container" data-testid={inputId}>
@@ -12,6 +17,8 @@ export const InputCheckbox: InputCheckboxComponent = ({ id, checked = false, dis
           "RampInputCheckbox--label-checked": checked,
           "RampInputCheckbox--label-disabled": disabled,
         })}
+        /* Made sure that label is properly associated with the correct input element, just in case. */
+        htmlFor={inputId}
       />
       <input
         id={inputId}
@@ -19,8 +26,11 @@ export const InputCheckbox: InputCheckboxComponent = ({ id, checked = false, dis
         className="RampInputCheckbox--input"
         checked={checked}
         disabled={disabled}
-        onChange={() => onChange(!checked)}
+        /* Updated onChange function to be a little more explicit here to prevent confusion. */
+        onChange={(event) => {
+          onChange(event.target.checked);
+        }}
       />
     </div>
-  )
-}
+  );
+};
