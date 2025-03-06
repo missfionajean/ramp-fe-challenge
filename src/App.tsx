@@ -83,6 +83,8 @@ export function App() {
           /* Updated following function to handle case where EMPTY_EMPLOYEE is the value instead of null, which is the case when "All Employees" is selected after a particular employee is selected. */
           onChange={async (newValue) => {
             if (newValue === null || newValue === EMPTY_EMPLOYEE) {
+              /* When changing back to all employees from a specific one, reloads all transactions fresh. */
+              setAllTransactions([]);
               await loadAllTransactions();
             } else {
               await loadTransactionsByEmployee(newValue.id);
@@ -95,17 +97,20 @@ export function App() {
         <div className="RampGrid">
           <Transactions transactions={transactions} />
 
-          {transactions !== null && (
-            <button
-              className="RampButton"
-              disabled={paginatedTransactionsUtils.loading}
-              onClick={async () => {
-                await loadAllTransactions();
-              }}
-            >
-              View More
-            </button>
-          )}
+          {/* Added more conditions, so View More doesn't show if we're in Employee view OR there are no more pagination pages left. */}
+          {transactions !== null &&
+            paginatedTransactions?.nextPage !== null &&
+            !transactionsByEmployee && (
+              <button
+                className="RampButton"
+                disabled={paginatedTransactionsUtils.loading}
+                onClick={async () => {
+                  await loadAllTransactions();
+                }}
+              >
+                View More
+              </button>
+            )}
         </div>
       </main>
     </Fragment>
