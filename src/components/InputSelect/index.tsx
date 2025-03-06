@@ -94,7 +94,8 @@ export function InputSelect<TItem>({
             return null;
           }
 
-          if (isLoading) {
+          /* Made contingent on items property rather than isLoading state variable. */
+          if (!items.length) {
             return (
               <div className="RampInputSelect--dropdown-item">
                 {loadingLabel}...

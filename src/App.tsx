@@ -16,13 +16,12 @@ export function App() {
     usePaginatedTransactions();
   const { data: transactionsByEmployee, ...transactionsByEmployeeUtils } =
     useTransactionsByEmployee();
-  const [isLoading, setIsLoading] = useState(false);
+
+  /* Commented out instances of isLoading, as it is no lomger needed for the employee dropdown. Not deleted, as I'm unsure if it will need to be re-added for any reason. */
+  // const [isLoading, setIsLoading] = useState(false);
 
   /* Adding in a state varaiables for updating transaction list in useMemo. */
   const [allTransactions, setAllTransactions] = useState<Transaction[]>([]);
-  const [employeeTransactions, setEmployeeTransactions] = useState<
-    Transaction[]
-  >([]);
 
   /* Creating a useEffect to run setAllTransactions whenever paginated transactions are fetched. */
   useEffect(() => {
@@ -41,13 +40,13 @@ export function App() {
   }, [transactionsByEmployee, allTransactions]);
 
   const loadAllTransactions = useCallback(async () => {
-    setIsLoading(true);
+    // setIsLoading(true);
     transactionsByEmployeeUtils.invalidateData();
 
     await employeeUtils.fetchAll();
     await paginatedTransactionsUtils.fetchAll();
 
-    setIsLoading(false);
+    // setIsLoading(false);
   }, [employeeUtils, paginatedTransactionsUtils, transactionsByEmployeeUtils]);
 
   const loadTransactionsByEmployee = useCallback(
@@ -72,7 +71,7 @@ export function App() {
         <hr className="RampBreak--l" />
 
         <InputSelect<Employee>
-          isLoading={isLoading}
+          // isLoading={isLoading}
           defaultValue={EMPTY_EMPLOYEE}
           items={employees === null ? [] : [EMPTY_EMPLOYEE, ...employees]}
           label="Filter by employee"
